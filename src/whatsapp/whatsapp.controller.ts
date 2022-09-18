@@ -1,34 +1,38 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { WhatsappService } from './whatsapp.service';
-import { CreateWhatsappDto } from './dto/create-whatsapp.dto';
-import { UpdateWhatsappDto } from './dto/update-whatsapp.dto';
+import {Body, Controller, Post} from '@nestjs/common';
+import {WhatsappService} from './whatsapp.service';
+import {TextMessageDto} from "./dto/text-message.dto";
+import {LocationMessageDto} from "./dto/location-message.dto";
+import {MultimediaMessageDto} from "./dto/multimedia-message.dto";
+import {InteractiveMessageDto} from "./dto/interactive-message.dto";
+import {ContactMessageDto} from "./dto/contact-message.dto";
 
 @Controller('whatsapp')
 export class WhatsappController {
-  constructor(private readonly whatsappService: WhatsappService) {}
+    constructor(private readonly whatsappService: WhatsappService) {
+    }
 
-  @Post()
-  create(@Body() createWhatsappDto: CreateWhatsappDto) {
-    return this.whatsappService.create(createWhatsappDto);
-  }
+    @Post('/text-message')
+    sendTextMessage(@Body() textMessageDto: TextMessageDto) {
 
-  @Get()
-  findAll() {
-    return this.whatsappService.findAll();
-  }
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.whatsappService.findOne(+id);
-  }
+    @Post('/multimedia-message')
+    sendMultimediaMessage(@Body() multimediaMessageDto: MultimediaMessageDto) {
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWhatsappDto: UpdateWhatsappDto) {
-    return this.whatsappService.update(+id, updateWhatsappDto);
-  }
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.whatsappService.remove(+id);
-  }
+    @Post('/location-message')
+    sendLocationMessage(@Body() locationMessageDto: LocationMessageDto) {
+
+    }
+
+    @Post('/contact-message')
+    sendContactMessage(@Body() contactMessageDto: ContactMessageDto) {
+
+    }
+
+    @Post('/interactive-message')
+    sendInteractiveMessage(@Body() interactiveMessageDto: InteractiveMessageDto) {
+
+    }
 }
