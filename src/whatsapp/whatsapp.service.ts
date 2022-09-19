@@ -24,31 +24,56 @@ export class WhatsappService {
     }
 
     async sendTextMessage(text: TextDto): Promise<ResponseDto> {
-        const response = await lastValueFrom(this.httpService.post(this.whatsapp_url, text, this.requestConfig)
+        const res = await lastValueFrom(this.httpService.post(this.whatsapp_url, text, this.requestConfig)
             .pipe(map((response) => response.data))
-            .pipe(catchError(() => {
+            .pipe(catchError((error) => {
+                    console.log(error)
                     throw new ForbiddenException('API Unavailable')
                 })
             ))
 
-        console.log(response.data);
+        console.log(res);
         return;
     }
 
 
     async sendMediaMessage(media: MediaDto) {
-        await this.httpService.post(this.whatsapp_url, media);
+        await lastValueFrom(this.httpService.post(this.whatsapp_url, media)
+            .pipe(map((response) => response.data))
+            .pipe(catchError((error) => {
+                    console.log(error)
+                    throw new ForbiddenException('API Unavailable')
+                })
+            ));
     }
 
     async sendContactMessage(contact: ContactDto) {
-        await this.httpService.post(this.whatsapp_url, contact)
+        await lastValueFrom(this.httpService.post(this.whatsapp_url, contact)
+            .pipe(map((response) => response.data))
+            .pipe(catchError((error) => {
+                    console.log(error)
+                    throw new ForbiddenException('API Unavailable')
+                })
+            ));
     }
 
     async sendLocationMessage(location: LocationDto) {
-        await this.httpService.post(this.whatsapp_url, location)
+        await lastValueFrom(this.httpService.post(this.whatsapp_url, location)
+            .pipe(map((response) => response.data))
+            .pipe(catchError((error) => {
+                    console.log(error)
+                    throw new ForbiddenException('API Unavailable')
+                })
+            ));
     }
 
     async sendInteractiveMessage(interactive: InteractiveDto) {
-        await this.httpService.post(this.whatsapp_url, interactive)
+        await lastValueFrom(this.httpService.post(this.whatsapp_url, interactive)
+            .pipe(map((response) => response.data))
+            .pipe(catchError((error) => {
+                    console.log(error)
+                    throw new ForbiddenException('API Unavailable')
+                })
+            ));
     }
 }
