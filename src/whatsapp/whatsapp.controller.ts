@@ -1,38 +1,38 @@
 import {Body, Controller, Post} from '@nestjs/common';
 import {WhatsappService} from './whatsapp.service';
-import {TextMessageDto} from "./dto/text-message.dto";
-import {LocationMessageDto} from "./dto/location-message.dto";
-import {MultimediaMessageDto} from "./dto/multimedia-message.dto";
-import {InteractiveMessageDto} from "./dto/interactive-message.dto";
-import {ContactMessageDto} from "./dto/contact-message.dto";
+import {TextDto} from "./dto/requests/text.dto";
+import {MediaDto} from "./dto/requests/media.dto";
+import {LocationDto} from "./dto/requests/location.dto";
+import {ContactDto} from "./dto/requests/contact.dto";
+import {InteractiveDto} from "./dto/requests/interactive.dto";
 
 @Controller('whatsapp')
 export class WhatsappController {
     constructor(private readonly whatsappService: WhatsappService) {
     }
 
-    @Post('/text-message')
-    sendTextMessage(@Body() textMessageDto: TextMessageDto) {
-
+    @Post('/contact')
+    sendContactMessage(@Body() contactDto: ContactDto) {
+        this.whatsappService.sendContactMessage(contactDto);
     }
 
-    @Post('/multimedia-message')
-    sendMultimediaMessage(@Body() multimediaMessageDto: MultimediaMessageDto) {
-
+    @Post('/interactive')
+    sendInteractiveMessage(@Body() interactiveDto: InteractiveDto) {
+        this.whatsappService.sendInteractiveMessage(interactiveDto)
     }
 
-    @Post('/location-message')
-    sendLocationMessage(@Body() locationMessageDto: LocationMessageDto) {
-
+    @Post('/media')
+    sendMediaMessage(@Body() mediaDto: MediaDto) {
+        this.whatsappService.sendMediaMessage(mediaDto);
     }
 
-    @Post('/contact-message')
-    sendContactMessage(@Body() contactMessageDto: ContactMessageDto) {
-
+    @Post('/location')
+    sendLocationMessage(@Body() locationDto: LocationDto) {
+        this.whatsappService.sendLocationMessage(locationDto);
     }
 
-    @Post('/interactive-message')
-    sendInteractiveMessage(@Body() interactiveMessageDto: InteractiveMessageDto) {
-
+    @Post('/text')
+    sendTextMessage(@Body() textDto: TextDto) {
+        this.whatsappService.sendTextMessage(textDto);
     }
 }

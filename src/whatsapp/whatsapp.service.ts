@@ -1,26 +1,54 @@
-import { Injectable } from '@nestjs/common';
-import { CreateWhatsappDto } from './dto/create-whatsapp.dto';
-import { UpdateWhatsappDto } from './dto/update-whatsapp.dto';
+import {ForbiddenException, Injectable} from '@nestjs/common';
+import {HttpService} from "@nestjs/axios";
+import {TextDto} from "./dto/requests/text.dto";
+import {MediaDto} from "./dto/requests/media.dto";
+import {ContactDto} from "./dto/requests/contact.dto";
+import {LocationDto} from "./dto/requests/location.dto";
+import {InteractiveDto} from "./dto/requests/interactive.dto";
+import {catchError, lastValueFrom, map} from "rxjs";
+import {ResponseDto} from "./dto/responses/response";
 
 @Injectable()
 export class WhatsappService {
-  create(createWhatsappDto: CreateWhatsappDto) {
-    return 'This action adds a new whatsapp';
-  }
+    constructor(private readonly httpService: HttpService) {
+    }
 
-  findAll() {
-    return `This action returns all whatsapp`;
-  }
+    private whatsapp_url = '';
+    private token = '';
+    private requestConfig = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.token}`
+        },
+        params: {}
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} whatsapp`;
-  }
+    async sendTextMessage(text: TextDto): Promise<ResponseDto> {
+        const response = await lastValueFrom(this.httpService.post(this.whatsapp_url, text, this.requestConfig)
+            .pipe(map((response) => response.data))
+            .pipe(catchError(() => {
+                    throw new ForbiddenException('API Unavailable')
+                })
+            ))
 
-  update(id: number, updateWhatsappDto: UpdateWhatsappDto) {
-    return `This action updates a #${id} whatsapp`;
-  }
+        console.log(response.data);
+        return;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} whatsapp`;
-  }
+
+    async sendMediaMessage(media: MediaDto) {
+        await this.httpService.post(this.whatsapp_url, media);
+    }
+
+    async sendContactMessage(contact: ContactDto) {
+        await this.httpService.post(this.whatsapp_url, contact)
+    }
+
+    async sendLocationMessage(location: LocationDto) {
+        await this.httpService.post(this.whatsapp_url, location)
+    }
+
+    async sendInteractiveMessage(interactive: InteractiveDto) {
+        await this.httpService.post(this.whatsapp_url, interactive)
+    }
 }
